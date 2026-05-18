@@ -6,8 +6,9 @@ database = {}
 # set up ZeroMQ
 context = zmq.Context()
 socket = context.socket(zmq.REP) # rep = reply, the listener
-socket.bind("tcp://*:5555")
+socket.bind("tcp://*:5556")
 
+print("Login authorization service is running on port 5556...")
 while True:
     message = socket.recv_json()
     if message['context'] == "login":
@@ -40,6 +41,8 @@ while True:
 
         else:
             socket.send_json({"status": False, "message": "Username not found"})
+    else:
+        socket.send_json({"status": False, "message": "Not correct context or no context was given"})
 
 
 
